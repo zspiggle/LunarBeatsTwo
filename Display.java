@@ -165,7 +165,7 @@ public class Display extends JFrame {
 		
 
 
-		
+
 		JPanel west_panel = new JPanel();
 		contentPane.add(west_panel, BorderLayout.WEST);
 		west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -245,7 +245,16 @@ public class Display extends JFrame {
 	}
 
 	public void handleButtonPress(Object src){
-		System.out.println("Button not found");
+		
+		if(src == play_button){
+
+
+		} else if(src == skip_button) {
+
+
+		} else {
+			System.out.println("Button not found");
+		}
 	// 	if(src == playButton){
 	// 		if (application.getisPlaying() == false){
 	// 				application.setisPlaying(true);

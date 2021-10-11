@@ -1,9 +1,22 @@
 1. Change file type from .mp3 to .wav
-2. Use audio without javafx
 
-3. UI redesign (Windowbuilder by eclipse?)
+Control audio using class, connect to buttons 
+redo CSV loader and create a Writer class, setup for song and playlist file loading 
+assign IDs to songs 
+Connect UI elements to audio 
+
+Playlist creation and deletion
+all songs playlist
+
+
+
+
+2. Use audio without javafx
+https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
+
+/3. UI redesign (Windowbuilder by eclipse?)
   Last thing for ui is to add automatically generated playlists and songs 
-  
+
 
 *4. Add playlist functionality
 
@@ -11,6 +24,8 @@ Currently playing check
 
 5. Color palette 
 6. Settings come last
+
+audio volume = https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
 
 
 palette https://colorhunt.co/palette/0000001500503f0071610094

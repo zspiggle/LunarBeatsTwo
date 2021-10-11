@@ -8,6 +8,8 @@ public class App {
 
   public ArrayList<Song> songs;
 
+  public Audio audio;
+
   public static void main(String[] args){
     App app = new App();
   }
@@ -16,6 +18,8 @@ public class App {
     String fileLocation = "Music/";
 
     songs = new ArrayList<Song>();
+
+    audio = new Audio(this);
 
     if(App.display == null){
       App.display = new Display();
@@ -31,6 +35,7 @@ public class App {
     for(int i = 0; i < songs.size(); i++){
       System.out.println(songs.get(i));
     }
+    
     
 
   }
