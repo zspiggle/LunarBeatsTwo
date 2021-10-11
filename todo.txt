@@ -1,0 +1,20 @@
+1. Change file type from .mp3 to .wav
+2. Use audio without javafx
+
+3. UI redesign (Windowbuilder by eclipse?)
+  Last thing for ui is to add automatically generated playlists and songs 
+  
+
+*4. Add playlist functionality
+
+Currently playing check
+
+5. Color palette 
+6. Settings come last
+
+
+palette https://colorhunt.co/palette/0000001500503f0071610094
+converter https://www.rapidtables.com/convert/color/hex-to-rgb.html
+
+mp3 to wav
+https://cloudconvert.com/mp3-to-wav
