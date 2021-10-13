@@ -375,6 +375,24 @@ public class Display extends JFrame {
 		}
 	}
 
+	public void updateVolumeButton(){
+		switch(App.app.audio.getVolumeSetting()){
+
+			case 1: volume_button.setIcon(getIcon("VolumeLow")); break;
+			case 2: volume_button.setIcon(getIcon("VolumeMed")); break;
+			case 3: volume_button.setIcon(getIcon("VolumeMax")); break;
+
+		}
+	}
+
+	public void updateMuteButton(){
+		if(App.app.audio.isMute() == true){
+			mute_button.setBackground(selected_color);
+		} else {
+			mute_button.setBackground(ui_color);
+		}
+	}
+
 
 	public void handleButtonPress(Object src){
 		
@@ -388,6 +406,26 @@ public class Display extends JFrame {
 		} else if(src == skip_button) {
 
 
+		} else if(src == volume_button){
+			Audio audio = App.app.audio;
+
+			int vol = App.app.audio.getVolumeSetting();
+
+			if(vol == 1){
+				App.app.audio.setVolumeSetting(2);
+			} else if(vol == 2){
+				App.app.audio.setVolumeSetting(3);
+			} else {
+				App.app.audio.setVolumeSetting(1);
+			}
+
+
+		} else if(src == mute_button){
+			try{
+				App.app.audio.mute();
+			} catch (Exception e){
+				//nothing
+			}
 		} else {
 
 			boolean foundButton = false;

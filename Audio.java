@@ -10,12 +10,17 @@ public class Audio implements LineListener{
   private String audioFilePath;
 
   private boolean isPlaying;
+  private int volumeSetting;
+  private boolean isMute;
   
   public Audio(App a){
 
     Audio.app = a;
 
     isPlaying = false;
+    volumeSetting = 2; //0 mute, 1 low, 2 med, 3 loud
+    isMute = false;
+
     //audioFilePath = "Music/STARSET - EARTHRISE.wav";
 
     //loadSong(audioFilePath);
@@ -67,6 +72,10 @@ public class Audio implements LineListener{
     return isPlaying;
   }
 
+  public boolean isMute(){
+    return isMute;
+  }
+
   public void loadSong(String path){
 
     if(audioClip != null){
@@ -91,7 +100,11 @@ public class Audio implements LineListener{
 
 
 
-      setVolume(.2f);
+      setVolumeSetting(volumeSetting);
+      if(isMute == true){
+        FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);        
+        gainControl.setValue(gainControl.getMinimum()); 
+      }
 
 
     } catch (Exception e) {
@@ -111,6 +124,38 @@ public class Audio implements LineListener{
           throw new IllegalArgumentException("Volume not valid: " + volume);
       FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);        
       gainControl.setValue(20f * (float) Math.log10(volume));
+  }
+
+  public int getVolumeSetting(){
+      return volumeSetting;
+  }
+
+  public void mute(){
+    if(isMute == false ){
+      FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);        
+      gainControl.setValue(gainControl.getMinimum()); 
+      isMute = true;
+    } else {
+      setVolumeSetting(volumeSetting);
+      isMute = false;
+    }
+
+
+    App.display.updateMuteButton();
+
+  }
+
+  public void setVolumeSetting(int setting){
+      volumeSetting = setting;
+
+      switch(volumeSetting){
+          case 1:setVolume(0.1f); break;
+          case 2: setVolume(0.5f); break;
+          case 3: setVolume(0.9f); break;
+          default: break;
+      }
+
+      App.display.updateVolumeButton();
   }
 
 }

@@ -1,6 +1,6 @@
 
 Connect buttons to functions
-  -volume -mute -Skip -shuffle -loop -back #-play/pause
+  #-volume #-mute -Skip -shuffle -loop -back #-play/pause
 Search bar through all songs
 Create playlist / Delete Playlist
 Add to playlist
