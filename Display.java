@@ -34,7 +34,7 @@ public class Display extends JFrame {
 
 
 	public static Color ui_color = new Color(57, 172, 231);
-	public static Color selected_color = new Color(65, 76, 80);
+	public static Color selected_color = new Color(7,132,181);//new Color(65, 76, 80);
 	public static Color primary = new Color(45, 56, 60);
 	public static Color bgColor = new Color(25,36,40);
 
@@ -213,8 +213,7 @@ public class Display extends JFrame {
 
 		addSongPanels();
 
-		loadPlaylistToDisplay(App.app.findPlaylist(0));
-
+		loadPlaylistToDisplay(App.app.getCurrentPlaylist());
   }
 
 
@@ -266,7 +265,7 @@ public class Display extends JFrame {
    * @param  String name  name of icon you are looking for
    * @return  The icon with the name you gave as a parameter
    */
-  private Icon getIcon(String name){
+  public Icon getIcon(String name){
       String loc = name + ".png";
       return icons.get(imageLocations.indexOf(loc));
   }
@@ -356,8 +355,8 @@ public class Display extends JFrame {
 
 		currentPlaylistDisplay.setText("PLAYLIST: " + p.name);
 
-		for(Song s : p.songs){
-			SongPanel sp = new SongPanel(s.getName(), s.getArtist(), s.getID());
+		for(Song s : p.getSongs()){
+			SongPanel sp = new SongPanel(s.getName(), s.getArtist(), s.getID(), this);
 			ids.add(s.getID());
 			songPanels.add(sp);
 		}
@@ -394,8 +393,15 @@ public class Display extends JFrame {
 	}
 
 
+	public void updateShuffleButton(){
+		if(App.app.getIsShuffling() == true){
+			shuffle_button.setIcon(getIcon("Shuffling"));
+		} else {
+			shuffle_button.setIcon(getIcon("Shuffle"));
+		}
+	}
+
 	public void handleButtonPress(Object src){
-		
 		if(src == play_button){
 			if(App.app.audio.isPlaying() == true){
 				App.app.audio.pause();
@@ -404,19 +410,25 @@ public class Display extends JFrame {
 			}
 
 		} else if(src == skip_button) {
+			App.app.nextSong();
 
+		} else if(src == previous_button) {
+			App.app.prevSong();
 
 		} else if(src == volume_button){
 			Audio audio = App.app.audio;
 
-			int vol = App.app.audio.getVolumeSetting();
 
-			if(vol == 1){
-				App.app.audio.setVolumeSetting(2);
-			} else if(vol == 2){
-				App.app.audio.setVolumeSetting(3);
-			} else {
-				App.app.audio.setVolumeSetting(1);
+			if(audio.getAudioClip() != null){
+				int vol = App.app.audio.getVolumeSetting();
+
+				if(vol == 1){
+					App.app.audio.setVolumeSetting(2);
+				} else if(vol == 2){
+					App.app.audio.setVolumeSetting(3);
+				} else {
+					App.app.audio.setVolumeSetting(1);
+				}
 			}
 
 
@@ -426,6 +438,16 @@ public class Display extends JFrame {
 			} catch (Exception e){
 				//nothing
 			}
+
+		} else if(src == shuffle_button){
+			if(App.app.getIsShuffling() == false){
+				App.app.setIsShuffling(true);
+			} else {
+				App.app.setIsShuffling(false);
+			}
+
+			
+
 		} else {
 
 			boolean foundButton = false;
@@ -433,8 +455,10 @@ public class Display extends JFrame {
 			//check all playlist and songpanel buttons
 			for(JButton b : playButtons){
 				if(src == b){
-					App.app.audio.loadSong(App.app.findSong(ids.get(playButtons.indexOf(b))).getFileLoc());
-					App.app.audio.play();
+					//App.app.audio.loadSong(App.app.findSong(ids.get(playButtons.indexOf(b))).getFileLoc());
+					//App.app.audio.play();
+					App.app.currentSong = App.app.findSong(ids.get(playButtons.indexOf(b)));
+					App.app.play();
 					foundButton = true;
 				}
 			}

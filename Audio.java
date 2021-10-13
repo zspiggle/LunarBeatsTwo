@@ -20,39 +20,38 @@ public class Audio implements LineListener{
     isPlaying = false;
     volumeSetting = 2; //0 mute, 1 low, 2 med, 3 loud
     isMute = false;
-
-    //audioFilePath = "Music/STARSET - EARTHRISE.wav";
-
-    //loadSong(audioFilePath);
-    //play();
-      //audioClip.start();
-
-    //FloatControl volume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
-      //volume.setValue(1f);
-
     
-
     
     
   }
 
   /**
-     * Listens to the START and STOP events of the audio line.
-     */
-    @Override
-    public void update(LineEvent event) {
-        LineEvent.Type type = event.getType();
-         
-        if (type == LineEvent.Type.START) {
-          playCompleted = false;
-          System.out.println("Playback started.");
-             
-        } else if (type == LineEvent.Type.STOP) {
-           playCompleted = true;
+   * Listens to the START and STOP events of the audio line.
+   */
+  @Override
+  public void update(LineEvent event) {
+      LineEvent.Type type = event.getType();
+      
+      if (type == LineEvent.Type.START) {
+        playCompleted = false;
+        //System.out.println("Playback started.");
+            
+      } else if (type == LineEvent.Type.STOP) {
+        //checks if just paused
+        if(audioClip.getFramePosition() >= audioClip.getFrameLength()){
+          playCompleted = true;
           System.out.println("Playback completed.");
+
+
+          App.app.nextSong();
+
         }
- 
-    }
+        
+        //
+
+      }
+
+  }
 
 
 
@@ -60,6 +59,7 @@ public class Audio implements LineListener{
     App.display.updatePlayButton();
     audioClip.start();
     isPlaying = true;
+    playCompleted = false;
   }
 
   public void pause(){
@@ -95,6 +95,7 @@ public class Audio implements LineListener{
 
       audioClip = (Clip) AudioSystem.getLine(info);
 
+      audioClip.addLineListener(this);
     
       audioClip.open(audioStream);
 
@@ -150,12 +151,17 @@ public class Audio implements LineListener{
 
       switch(volumeSetting){
           case 1:setVolume(0.1f); break;
-          case 2: setVolume(0.5f); break;
-          case 3: setVolume(0.9f); break;
+          case 2: setVolume(0.3f); break;
+          case 3: setVolume(0.7f); break;
           default: break;
       }
 
       App.display.updateVolumeButton();
   }
+
+public Clip getAudioClip(){
+  return audioClip;
+}
+
 
 }

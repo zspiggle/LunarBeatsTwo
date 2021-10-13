@@ -24,7 +24,7 @@ public class SongPanel{
   }
 
 
-  public SongPanel(String song, String artist, int id){
+  public SongPanel(String song, String artist, int id, Display d){
     songName = song;
     artistName = artist;
 
@@ -34,7 +34,7 @@ public class SongPanel{
 
     addToButton = new JButton("Add To");
 
-    playButton = new JButton("Play");
+    playButton = new JButton(d.getIcon("Play"));
 
   }
 

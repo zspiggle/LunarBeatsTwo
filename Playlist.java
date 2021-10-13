@@ -6,7 +6,7 @@ public class Playlist {
   private int id;
   public String name;
 
-  public ArrayList<Song> songs;
+  private ArrayList<Song> songs;
 
 
   public Playlist(){
@@ -37,6 +37,10 @@ public class Playlist {
 
   public String toCSV(){
     return null;
+  }
+
+  public ArrayList<Song> getSongs(){
+    return songs;
   }
 
 }

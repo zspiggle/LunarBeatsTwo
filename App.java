@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class App {
@@ -10,7 +11,16 @@ public class App {
   public ArrayList<Song> songs;
   public ArrayList<Playlist> playlists;
 
+  public ArrayList<Song> tracklist;
+  private int trackPosition;
+
+  public Song currentSong;
+  public Playlist currentPlaylist;
+
+
   public Audio audio;
+
+  private boolean isShuffling;
 
   private int nextID;
 
@@ -32,7 +42,12 @@ public class App {
     songs = new ArrayList<Song>();
     playlists = new ArrayList<Playlist>();
 
+    tracklist = new ArrayList<Song>();
+
     audio = new Audio(this);
+
+    isShuffling = false;
+    trackPosition = 0;
 
 
     try{
@@ -47,6 +62,7 @@ public class App {
     
     Playlist allSongs = new Playlist("All Songs", songs, 0);
     playlists.add(allSongs);
+    currentPlaylist = allSongs;
 
 
     if(App.display == null){
@@ -54,6 +70,11 @@ public class App {
       App.display.setVisible(true);
     }
 
+
+    generateTracklist();
+    for(Song s : tracklist){
+      System.out.println(s);
+    }
   }
 
   private void goThroughFiles(String dir) throws IOException{
@@ -141,6 +162,24 @@ public class App {
     return found;
   }
 
+  public Song getCurrentSong(){
+    return currentSong;
+  }
+
+  public void setCurrentSong(Song s){
+    currentSong = s;
+    trackPosition = tracklist.indexOf(s);
+  }
+
+  public Playlist getCurrentPlaylist(){
+    return currentPlaylist;
+  }
+
+  public void play(){
+    audio.loadSong(currentSong.getFileLoc());
+	  audio.play();
+  }
+
   public Playlist findPlaylist(int playID){
     Playlist found = null;
 
@@ -154,7 +193,45 @@ public class App {
     return found;
   }
 
+  public boolean getIsShuffling(){
+    return isShuffling;
+  }
+
+  public void setIsShuffling(boolean b){
+    isShuffling = b;
+    display.updateShuffleButton();
+  }
 
 
+  public void generateTracklist(){
+      tracklist = currentPlaylist.getSongs();
+
+      if(isShuffling == true){
+        Collections.shuffle(tracklist);
+      }
+
+  }
+
+  public void nextSong(){
+    trackPosition++;
+    if(trackPosition >= tracklist.size()){
+      trackPosition = 0;
+    }
+
+    currentSong = tracklist.get(trackPosition);
+    play();
+
+  }
+
+  public void prevSong(){
+    trackPosition--;
+    if(trackPosition < 0){
+      trackPosition = tracklist.size()-1;
+    }
+
+    currentSong = tracklist.get(trackPosition);
+    play();
+
+  }
 
 }

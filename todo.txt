@@ -1,11 +1,11 @@
 
 Connect buttons to functions
-  #-volume #-mute -Skip -shuffle -loop -back #-play/pause
+  #-volume #-mute #-Skip -shuffle(THEORETICALLY DONE) -loop -back(THEORETICALLY WORKS) #-play/pause
 Search bar through all songs
 Create playlist / Delete Playlist
 Add to playlist
 Save playlist as CSV  - ID may change based on loadup, save by file if exists
-Save all songs as CSV? -May not be necessary
+Save all songs as CSV? -May not be necessary, keep ids?
 Like feature
 
 Update ICONS
