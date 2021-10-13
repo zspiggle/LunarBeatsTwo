@@ -1,17 +1,19 @@
-
-
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import java.lang.reflect.Array;
+
 import javax.imageio.*;
 import java.util.ArrayList;
 
 public class Display extends JFrame {
 
+	private boolean isPlaying = false;
+
 	//private ArrayList<JButton> buttons;
-	private ButtonListener buttonListener;
+	private static ButtonListener buttonListener;
 
 	//Buttons
 	private JButton search_button;
@@ -23,8 +25,19 @@ public class Display extends JFrame {
 	private JButton loop_button;
 	private JButton volume_button;
 	private JButton mute_button;
+	private JButton delete_playlist_button;
 
-	private Color ui_color = new Color(63, 0, 113);
+	private ArrayList<JButton> likeButtons;
+	private ArrayList<JButton> addToButtons;
+	private ArrayList<JButton> playButtons;
+	private ArrayList<Integer> ids;
+
+
+	public static Color ui_color = new Color(57, 172, 231);
+	public static Color selected_color = new Color(65, 76, 80);
+	public static Color primary = new Color(45, 56, 60);
+	public static Color bgColor = new Color(25,36,40);
+
 
   private ArrayList<String> imageLocations;
   private ArrayList<Icon> icons;
@@ -38,15 +51,27 @@ public class Display extends JFrame {
 	private Label currentSongDisplay;
 	private Label currentArtistDisplay;
 
+	private Label currentPlaylistDisplay;
+
+	//Central layout display
+	private JPanel center_panel;
+
+	private ArrayList<SongPanel> songPanels;
+
+
   public Display(){
 
 		buttonListener = new ButtonListener(this);
 		//buttons = new ArrayList<JButton>();
 		loadImages(); 
 
-		Color primary = new Color(31, 27, 36);
-		Color bgColor = new Color(0,0,0);
-		//Color secondary = new Color(21, 0, 80);
+		songPanels = new ArrayList<SongPanel>();
+		likeButtons = new ArrayList<JButton>();
+		addToButtons = new ArrayList<JButton>();
+		playButtons = new ArrayList<JButton>();
+		ids = new ArrayList<Integer>();
+
+		//Color secondary = new Color(45, 56, 60); new Color(65, 76, 80);
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 960, 540);
@@ -55,18 +80,21 @@ public class Display extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		
-		JPanel center_panel = new JPanel();
-		contentPane.add(center_panel, BorderLayout.CENTER);
-		center_panel.setBackground(bgColor);
 
-    JScrollPane scroll_pane = new JScrollPane(center_panel);
-    contentPane.add(scroll_pane);
+		currentPlaylistDisplay = new Label("PLAYLIST: Null");
+		
+		
+		delete_playlist_button = new JButton("Delete Playlist");
+		setupButton(delete_playlist_button);
+
+		resetCenter();
+
+
 
 		JPanel north_panel = new JPanel();
 		contentPane.add(north_panel, BorderLayout.NORTH);
 		north_panel.setLayout(new BorderLayout(0, 0));
-		north_panel.setBackground(primary);
+		north_panel.setBackground(Display.primary);
 
 
 
@@ -74,7 +102,7 @@ public class Display extends JFrame {
 		JPanel search_panel = new JPanel();
 		north_panel.add(search_panel, BorderLayout.EAST);
 		search_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		search_panel.setBackground(primary);
+		search_panel.setBackground(Display.primary);
 		
 		search_field = new JTextField();
 		search_panel.add(search_field);
@@ -85,11 +113,12 @@ public class Display extends JFrame {
 
 		search_button = new JButton("Search");//getIcon("search_button"));
 		setupButton(search_button);
+		search_button.setBackground(selected_color);
 		search_panel.add(search_button);
 		
 		JPanel settings_panel = new JPanel();
 		north_panel.add(settings_panel, BorderLayout.WEST);
-		settings_panel.setBackground(primary);
+		settings_panel.setBackground(Display.primary);
 		
 		settings_button = new JButton("Settings");//getIcon("settings_button"));
 		setupButton(settings_button);
@@ -97,7 +126,7 @@ public class Display extends JFrame {
 		
 		JPanel display_panel = new JPanel();
 		north_panel.add(display_panel, BorderLayout.CENTER);
-		display_panel.setBackground(primary);
+		display_panel.setBackground(Display.primary);
 
 		Label displayCurrent = new Label("Currently Playing...");
 		displayCurrent.setForeground(Color.WHITE);
@@ -118,12 +147,12 @@ public class Display extends JFrame {
 		JPanel south_panel = new JPanel();
 		contentPane.add(south_panel, BorderLayout.SOUTH);
 		south_panel.setLayout(new BorderLayout(0, 0));
-		south_panel.setBackground(primary);
+		south_panel.setBackground(Display.primary);
 		
 		JPanel center_control_panel = new JPanel();
 		south_panel.add(center_control_panel, BorderLayout.CENTER);
 		center_control_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		center_control_panel.setBackground(primary);
+		center_control_panel.setBackground(Display.primary);
 
 		previous_button = new JButton(getIcon("Previous"));
 		setupButton(previous_button);
@@ -140,7 +169,7 @@ public class Display extends JFrame {
 		JPanel right_control_panel = new JPanel();
 		south_panel.add(right_control_panel, BorderLayout.EAST);
 		right_control_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		right_control_panel.setBackground(primary);
+		right_control_panel.setBackground(Display.primary);
 
 		shuffle_button = new JButton(getIcon("Shuffle"));
 		setupButton(shuffle_button);
@@ -152,7 +181,7 @@ public class Display extends JFrame {
 
 		JPanel left_control_panel = new JPanel();
 		south_panel.add(left_control_panel, BorderLayout.WEST);
-		left_control_panel.setBackground(primary);
+		left_control_panel.setBackground(Display.primary);
 
 		volume_button = new JButton(getIcon("VolumeMed"));
 		setupButton(volume_button);
@@ -169,7 +198,10 @@ public class Display extends JFrame {
 		JPanel west_panel = new JPanel();
 		contentPane.add(west_panel, BorderLayout.WEST);
 		west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		west_panel.setBackground(primary);
+		west_panel.setBackground(Display.primary);
+
+		JScrollPane scroll_pane2 = new JScrollPane(west_panel);
+    contentPane.add(scroll_pane2, BorderLayout.WEST);
 
 		JButton liked_playlist = new JButton("Liked Songs");
 		setupButton(liked_playlist); 
@@ -179,6 +211,9 @@ public class Display extends JFrame {
     Image img = Toolkit.getDefaultToolkit().getImage("Icons/ProgramIcon.png");
     setIconImage(img);
 
+		addSongPanels();
+
+		loadPlaylistToDisplay(App.app.findPlaylist(0));
 
   }
 
@@ -238,22 +273,140 @@ public class Display extends JFrame {
 
 	private void setupButton(JButton b){
 		b.setFocusPainted(false);
-		b.setBackground(ui_color);
+		b.setBackground(Display.ui_color);
 		b.setForeground(Color.WHITE);
 		//buttons.add(b);
 		b.addActionListener(buttonListener);
 	}
 
+
+	private void addSongPanels(){
+
+		for(SongPanel s : songPanels){
+			center_panel.add(s.toJPanel());
+			if(s.getLikeButton() != null){
+				setupButton(s.getLikeButton());
+				likeButtons.add(s.getLikeButton());
+			}
+			if(s.getAddToButton() != null){
+				setupButton(s.getAddToButton());
+				addToButtons.add(s.getAddToButton());
+			
+			}
+			if(s.getPlayButton() != null){
+				setupButton(s.getPlayButton());
+				playButtons.add(s.getPlayButton());
+			}
+		}
+
+	}
+
+	private void resetSongPanels(){
+		likeButtons = new ArrayList<JButton>();
+		addToButtons = new ArrayList<JButton>();
+		playButtons = new ArrayList<JButton>();
+		songPanels = new ArrayList<SongPanel>();
+		ids = new ArrayList<Integer>();
+
+		resetCenter();
+	}
+
+
+	private void resetCenter(){
+		center_panel = new JPanel();
+		contentPane.add(center_panel, BorderLayout.CENTER);
+		center_panel.setBackground(Display.bgColor);
+		center_panel.setLayout(new GridLayout(0,1,0,0));
+		
+		
+    JScrollPane scroll_pane = new JScrollPane(center_panel);
+    contentPane.add(scroll_pane);
+
+		JPanel playlist_panel = new JPanel();
+		center_panel.add(playlist_panel);
+		playlist_panel.setBackground(Display.bgColor);
+
+		playlist_panel.add(currentPlaylistDisplay);
+		currentPlaylistDisplay.setForeground(Color.WHITE);
+		currentPlaylistDisplay.setFont(currentPlaylistDisplay.getFont().deriveFont(18.0f));
+		playlist_panel.add(delete_playlist_button);
+
+		JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+		center_panel.add(header);
+		header.setBackground(Display.bgColor);
+
+		JLabel song_column = new JLabel("SONG"); 
+		header.add(song_column);
+		song_column.setForeground(Color.WHITE);
+		song_column.setFont(song_column.getFont().deriveFont(14.0f));
+
+		JLabel artist_column = new JLabel("ARTIST"); 
+		header.add(artist_column);
+		artist_column.setForeground(Color.WHITE);
+		artist_column.setFont(artist_column.getFont().deriveFont(14.0f));
+
+
+		addSongPanels();
+	}
+
+
+	public void loadPlaylistToDisplay(Playlist p){
+
+		resetSongPanels();
+
+		currentPlaylistDisplay.setText("PLAYLIST: " + p.name);
+
+		for(Song s : p.songs){
+			SongPanel sp = new SongPanel(s.getName(), s.getArtist(), s.getID());
+			ids.add(s.getID());
+			songPanels.add(sp);
+		}
+		
+		resetCenter();
+
+	}
+
+	
+	public void updatePlayButton(){
+		if(App.app.audio.isPlaying() == true){
+			play_button.setIcon(getIcon("Play"));
+		} else {
+			play_button.setIcon(getIcon("Pause"));
+		}
+	}
+
+
 	public void handleButtonPress(Object src){
 		
 		if(src == play_button){
-
+			if(App.app.audio.isPlaying() == true){
+				App.app.audio.pause();
+			} else {
+				App.app.audio.play();
+			}
 
 		} else if(src == skip_button) {
 
 
 		} else {
-			System.out.println("Button not found");
+
+			boolean foundButton = false;
+
+			//check all playlist and songpanel buttons
+			for(JButton b : playButtons){
+				if(src == b){
+					App.app.audio.loadSong(App.app.findSong(ids.get(playButtons.indexOf(b))).getFileLoc());
+					App.app.audio.play();
+					foundButton = true;
+				}
+			}
+
+
+
+			if(foundButton == false){
+				System.out.println("Button not found");
+			}
+			
 		}
 	// 	if(src == playButton){
 	// 		if (application.getisPlaying() == false){

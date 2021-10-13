@@ -10,6 +10,8 @@ public class Song //implements Comparable<Song>
     //The comparable was never used, songs are organized by files and automatically load in an
     //alphabetical order
     
+    private int id;
+
     private String fileLoc;
     
     private String artist;
@@ -25,12 +27,12 @@ public class Song //implements Comparable<Song>
      *  @param  String n  The name of the song
      *  @param  boolean l  This value is whether the song is liked on not. This feature has been omitted
      */
-    public Song(String f, String a, String n, boolean l){
+    public Song(String f, String a, String n, boolean l, int id){
         this.fileLoc = f;
         this.artist = a;
         this.name = n;
         this.liked = l;
-        
+        this.id = id;
     }
     
     /**
@@ -60,7 +62,9 @@ public class Song //implements Comparable<Song>
         return fileLoc;
     }
     
-    //Omitted functions
+    public int getID(){
+        return id;
+    }
     
     public String to_csv(){
         return artist + "," + name + "," + fileLoc + "," + liked;

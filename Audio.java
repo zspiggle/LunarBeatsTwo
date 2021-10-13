@@ -7,34 +7,27 @@ public class Audio implements LineListener{
   private boolean playCompleted;
   private Clip audioClip;
 
+  private String audioFilePath;
+
+  private boolean isPlaying;
+  
   public Audio(App a){
+
     Audio.app = a;
 
-    String audioFilePath = "Music/STARSET - EARTHRISE.wav";
+    isPlaying = false;
+    //audioFilePath = "Music/STARSET - EARTHRISE.wav";
 
-    File audioFile = new File(audioFilePath);
-    try {
-      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
-
-      AudioFormat format = audioStream.getFormat();
- 
-      DataLine.Info info = new DataLine.Info(Clip.class, format);
-
-      audioClip = (Clip) AudioSystem.getLine(info);
-
-      
-
-      audioClip.open(audioStream);
-      audioClip.start();
+    //loadSong(audioFilePath);
+    //play();
+      //audioClip.start();
 
     //FloatControl volume = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);
       //volume.setValue(1f);
 
-      //setVolume(.5f);
+    
 
-    } catch (Exception e) {
-      System.out.println("Exception with Audio");
-    }
+    
     
   }
 
@@ -57,6 +50,55 @@ public class Audio implements LineListener{
     }
 
 
+
+  public void play(){
+    App.display.updatePlayButton();
+    audioClip.start();
+    isPlaying = true;
+  }
+
+  public void pause(){
+    App.display.updatePlayButton();
+    audioClip.stop();
+    isPlaying = false;
+  }
+
+  public boolean isPlaying(){
+    return isPlaying;
+  }
+
+  public void loadSong(String path){
+
+    if(audioClip != null){
+      pause();
+      audioClip.close();
+    }
+    
+
+    File audioFile = new File(path);
+    
+    try {
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+
+      AudioFormat format = audioStream.getFormat();
+ 
+      DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+      audioClip = (Clip) AudioSystem.getLine(info);
+
+    
+      audioClip.open(audioStream);
+
+
+
+      setVolume(.2f);
+
+
+    } catch (Exception e) {
+      System.out.println("Exception with Audio");
+    }
+
+  }
 
 
   public float getVolume() {

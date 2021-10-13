@@ -4,27 +4,36 @@ import java.util.ArrayList;
 
 public class App {
 
+  public static App app;
   public static Display display;
 
   public ArrayList<Song> songs;
+  public ArrayList<Playlist> playlists;
 
   public Audio audio;
+
+  private int nextID;
 
   public static void main(String[] args){
     App app = new App();
   }
 
   public App(){
+
+    if(App.app == null){
+      app = this;
+    }
+
+
+    nextID = 0;
+
     String fileLocation = "Music/";
 
     songs = new ArrayList<Song>();
+    playlists = new ArrayList<Playlist>();
 
     audio = new Audio(this);
 
-    if(App.display == null){
-      App.display = new Display();
-      App.display.setVisible(true);
-    }
 
     try{
       goThroughFiles(fileLocation);
@@ -32,11 +41,18 @@ public class App {
       System.out.println("There was an issue loading songs");
     }
 
-    for(int i = 0; i < songs.size(); i++){
-      System.out.println(songs.get(i));
+    // for(int i = 0; i < songs.size(); i++){
+    //   System.out.println(songs.get(i));
+    // }
+    
+    Playlist allSongs = new Playlist("All Songs", songs, 0);
+    playlists.add(allSongs);
+
+
+    if(App.display == null){
+      App.display = new Display();
+      App.display.setVisible(true);
     }
-    
-    
 
   }
 
@@ -85,7 +101,9 @@ public class App {
 
   public void newSong(String file, String name, String artist, boolean like){
     if(findSong(name, artist) == null){
-        Song song = new Song(file,name,artist,like);
+        Song song = new Song(file,name,artist,like, nextID);
+        nextID++;
+
         songs.add(song);
 
         //allSongs.addSong(song);
@@ -109,5 +127,34 @@ public class App {
 
     return found;
   }
+
+  public Song findSong(int songID){
+    Song found = null;
+
+    //Linear search
+    for(Song s : songs){
+        if (s.getID() == songID){
+            found = s;
+        }
+    }
+
+    return found;
+  }
+
+  public Playlist findPlaylist(int playID){
+    Playlist found = null;
+
+    //Linear search
+    for(Playlist p : playlists){
+        if (p.getID() == playID){
+            found = p;
+        }
+    }
+
+    return found;
+  }
+
+
+
 
 }

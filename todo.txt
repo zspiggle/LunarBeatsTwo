@@ -1,4 +1,18 @@
-1. Change file type from .mp3 to .wav
+
+Connect buttons to functions
+  -volume -mute -Skip -shuffle -loop -back #-play/pause
+Search bar through all songs
+Create playlist / Delete Playlist
+Add to playlist
+Save playlist as CSV  - ID may change based on loadup, save by file if exists
+Save all songs as CSV? -May not be necessary
+Like feature
+
+Update ICONS
+Get more music in folder
+
+--------------------------------
+/1. Change file type from .mp3 to .wav
 
 Control audio using class, connect to buttons 
 redo CSV loader and create a Writer class, setup for song and playlist file loading 
@@ -8,7 +22,13 @@ Connect UI elements to audio
 Playlist creation and deletion
 all songs playlist
 
+(This wont work because you can maximize and that will distort with padding) padding system for song display -> buffer wroks, just add empty SongPanels to center_panel based on number of songs
+Playlist button generation
 
+Search bar through all songs
+
+
+you could buffer all strings in name and artist to make everything line up
 
 
 2. Use audio without javafx
@@ -29,6 +49,8 @@ audio volume = https://stackoverflow.com/questions/40514910/set-volume-of-java-c
 
 
 palette https://colorhunt.co/palette/0000001500503f0071610094
+https://www.color-hex.com/color-palette/81190
+
 converter https://www.rapidtables.com/convert/color/hex-to-rgb.html
 
 mp3 to wav
