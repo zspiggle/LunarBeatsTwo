@@ -295,10 +295,10 @@ public class Display extends JFrame {
 
 		for(SongPanel s : songPanels){
 			center_panel.add(s.toJPanel());
-			if(s.getLikeButton() != null){
-				setupButton(s.getLikeButton());
-				likeButtons.add(s.getLikeButton());
-			}
+			// if(s.getLikeButton() != null){
+			// 	setupButton(s.getLikeButton());
+			// 	likeButtons.add(s.getLikeButton());
+			// }
 			if(s.getAddToButton() != null){
 				setupButton(s.getAddToButton());
 				addToButtons.add(s.getAddToButton());
@@ -627,6 +627,25 @@ public class Display extends JFrame {
 				}
 			}
 
+			// for(JButton b : likeButtons){
+				
+			// 	if(src == b){
+			// 		Song s = App.app.findSong(ids.get(likeButtons.indexOf(b)));
+					
+			// 		if(s.getLike() == true){
+			// 			s.setLike(false);
+			// 			b.setIcon(getIcon("Unliked"));
+			// 		} else {
+			// 			s.setLike(true);
+			// 			b.setIcon(getIcon("Liked"));
+			// 		}
+					
+			// 		foundButton = true;
+
+			// 		App.app.saveSongs();
+
+			// 	}
+			// }
 
 			if(foundButton == false){
 				System.out.println("Button not found");

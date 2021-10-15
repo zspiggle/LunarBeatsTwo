@@ -6,7 +6,7 @@ Delete Playlist (Prevent deleting certain playlists)
 #Add to playlist
 Save playlist as CSV  - ID may change based on loadup, save by file if exists
 Save all songs as CSV? -May not be necessary, keep ids?
-Like feature
+Like feature <- remove
 Remove from playlist feature
 
 

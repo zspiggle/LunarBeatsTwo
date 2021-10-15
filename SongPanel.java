@@ -28,7 +28,12 @@ public class SongPanel{
     songName = song;
     artistName = artist;
 
-    likeButton = new JButton("Like");
+    // if(App.app.findSong(song, artist).getLike()){
+    //   likeButton = new JButton(d.getIcon("Liked"));
+    // } else {
+    //   likeButton = new JButton(d.getIcon("Unliked"));
+    // }
+    
 
 		//likeButton.addActionListener(Display.buttonListener); Do in display
 
@@ -38,9 +43,9 @@ public class SongPanel{
 
   }
 
-  public JButton getLikeButton(){
-    return likeButton;
-  }
+  // public JButton getLikeButton(){
+  //   return likeButton;
+  // }
 
   public JButton getAddToButton(){
     return addToButton;
@@ -68,9 +73,9 @@ public class SongPanel{
     artist_column.setPreferredSize(new Dimension(100, 25));
 
 
-    if(likeButton != null){
-      panel.add(likeButton);
-    }
+    // if(likeButton != null){
+    //   panel.add(likeButton);
+    // }
     if(addToButton != null){
       panel.add(addToButton);
     }

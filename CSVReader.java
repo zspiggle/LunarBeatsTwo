@@ -11,7 +11,7 @@ public class CSVReader{
 
     private Object[] columnNames;
 
-    private Object[][] data;
+    public Object[][] data;
     
     private String filename;
 

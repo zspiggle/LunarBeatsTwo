@@ -51,6 +51,15 @@ public class App {
     isShuffling = false;
     trackPosition = 0;
 
+    //Load existing songs
+    File f = new File("Files/Songs.csv");
+    if(f.exists()){
+      loadSongs();
+      //nextID = getHighestID(); 
+    }
+
+
+
 
     try{
       goThroughFiles(fileLocation);
@@ -69,10 +78,10 @@ public class App {
 
 
     //Playlist p = new Playlist("All Songs");
-     Playlist p1 = new Playlist("Liked Songs", 1);
-     playlists.add(p1);
-     Playlist p2 = new Playlist("Test playlist", 2);
-     playlists.add(p2);
+    //  Playlist p1 = new Playlist("Liked Songs", 1);
+    //  playlists.add(p1);
+    //  Playlist p2 = new Playlist("Test playlist", 2);
+    //  playlists.add(p2);
 
 
     if(App.display == null){
@@ -90,6 +99,10 @@ public class App {
 
     
       currentSong = tracklist.get(0);
+
+
+      saveSongs();
+
   }
 
   private void goThroughFiles(String dir) throws IOException{
@@ -127,17 +140,19 @@ public class App {
 
       // System.out.println(nam);
 
-      if(findSong(nam,art) == null){
-          newSong(songFile.getPath(), art, nam, false);
+      if(findSong(nam,art) == null){ //if isnt already exists
+          newSong(songFile.getPath(), art, nam);//, nextID); false, nextID);
+          nextID++;
+          //System.out.println("Loaded: " + nam);
       }
 
   }
 
 
 
-  public void newSong(String file, String name, String artist, boolean like){
+  public void newSong(String file, String name, String artist){//, int id){ boolean like, int id){
     if(findSong(name, artist) == null){
-        Song song = new Song(file,name,artist,like, nextID);
+        Song song = new Song(file,name,artist,nextID);//like, id);
         nextID++;
 
         songs.add(song);
@@ -176,6 +191,17 @@ public class App {
 
     return found;
   }
+
+  // public int getHighestID(){
+  //   int max = songs.get(0).getID();
+  //   for(Song s : songs){
+  //     if(s.getID() > max){
+  //       max = s.getID();
+  //     }
+  //   }
+
+  //   return max;
+  // }
 
 
   public Song getCurrentSong(){
@@ -273,6 +299,18 @@ public class App {
 
     nextPlayID++;
   }
+
+  public void saveSongs(){
+    SongWriter sw = new SongWriter("Files/Songs.csv");
+
+    sw.close();
+  }
+
+  public void loadSongs(){
+    SongReader sr = new SongReader("Files/Songs.csv");
+   
+  }
+
 
 
 }

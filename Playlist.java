@@ -56,4 +56,13 @@ public class Playlist {
     return songs;
   }
 
+  public void setDelete(boolean b){
+    deletable = b;
+  }
+
+  public boolean getDelete(){
+    return deletable;
+
+  }
+
 }

@@ -2,6 +2,7 @@ import java.io.*;
 
 public class CSVWriter {
   
+  static String path = "Files/";
 
   private String fileLoc;
   private FileWriter fw;
@@ -14,7 +15,9 @@ public class CSVWriter {
     
 
     try{
+;
       file.createNewFile();
+      
 
       fw = new FileWriter(file);
 

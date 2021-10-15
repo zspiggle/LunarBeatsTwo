@@ -17,7 +17,7 @@ public class Song //implements Comparable<Song>
     private String artist;
     private String name;
     
-    private boolean liked;
+    //private boolean liked;
     
     /**
      *  Default constructer for a song. Requires 4 values
@@ -27,11 +27,11 @@ public class Song //implements Comparable<Song>
      *  @param  String n  The name of the song
      *  @param  boolean l  This value is whether the song is liked on not. This feature has been omitted
      */
-    public Song(String f, String a, String n, boolean l, int id){
+    public Song(String f, String a, String n, int id){//boolean l, int id){
         this.fileLoc = f;
         this.artist = a;
         this.name = n;
-        this.liked = l;
+        //this.liked = l;
         this.id = id;
     }
     
@@ -67,16 +67,16 @@ public class Song //implements Comparable<Song>
     }
     
     public String to_csv(){
-        return artist + "," + name + "," + fileLoc + "," + liked;
+        return artist + "," + name + "," + fileLoc;  // + "," + liked;
     }
     
-    public boolean getLike(){
-        return liked;
-    }
+    // public boolean getLike(){
+    //     return liked;
+    // }
     
-    public void setLike(boolean value){
-        this.liked = value;
-    }
+    // public void setLike(boolean value){
+    //     this.liked = value;
+    // }
     
     /*
     @Override
