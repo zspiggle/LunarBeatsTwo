@@ -5,6 +5,7 @@ public class Playlist {
   
   private int id;
   private String name;
+  private boolean deletable;
 
   private ArrayList<Song> songs;
 

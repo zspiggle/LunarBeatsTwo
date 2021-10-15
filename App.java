@@ -23,6 +23,7 @@ public class App {
   private boolean isShuffling;
 
   private int nextID;
+  private int nextPlayID;
 
   public static void main(String[] args){
     App app = new App();
@@ -36,6 +37,7 @@ public class App {
 
 
     nextID = 0;
+    nextPlayID = 3;
 
     String fileLocation = "Music/";
 
@@ -60,16 +62,17 @@ public class App {
     //   System.out.println(songs.get(i));
     // }
     
+
     Playlist allSongs = new Playlist("All Songs", songs, 0);
     playlists.add(allSongs);
     currentPlaylist = allSongs;
 
 
     //Playlist p = new Playlist("All Songs");
-    Playlist p1 = new Playlist("Liked Songs", 1);
-    playlists.add(p1);
-    Playlist p2 = new Playlist("Test playlist", 2);
-    playlists.add(p2);
+     Playlist p1 = new Playlist("Liked Songs", 1);
+     playlists.add(p1);
+     Playlist p2 = new Playlist("Test playlist", 2);
+     playlists.add(p2);
 
 
     if(App.display == null){
@@ -86,7 +89,7 @@ public class App {
     // }
 
     
-
+      currentSong = tracklist.get(0);
   }
 
   private void goThroughFiles(String dir) throws IOException{
@@ -258,5 +261,18 @@ public class App {
     play();
 
   }
+
+  public void createPlaylist(String name, Song firstSong){
+    Playlist p = new Playlist(name, nextPlayID);
+
+    p.addSong(firstSong);
+
+    playlists.add(p);
+
+    display.updatePlaylistsDisplay();
+
+    nextPlayID++;
+  }
+
 
 }

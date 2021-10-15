@@ -212,7 +212,7 @@ public class Display extends JFrame {
 		
 
 
-
+		createPlaylistsDisplay();
 		updatePlaylistsDisplay();
 
 
@@ -473,6 +473,39 @@ public class Display extends JFrame {
 
 
 	public void updatePlaylistsDisplay(){
+		
+
+
+		for(Playlist p : App.app.playlists){
+
+			boolean flag = false;
+
+			for(Integer i : playlistIds ){
+					if (p.getID() == i){
+						flag = true;
+					}
+			}
+
+			if(!flag){
+
+				JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+				buttonPane.setBackground(Display.primary);
+			//	buttonPane.setPreferredSize(new Dimension(25, 25));
+
+				JButton b = new JButton(p.getName());
+				setupButton(b);
+				playlistButtons.add(b);
+				playlistIds.add(p.getID());
+				buttonPane.add(b);
+				west_panel.add(buttonPane);
+			}
+		}
+
+		west_panel.revalidate();
+		west_panel.repaint();
+	}
+
+	public void createPlaylistsDisplay(){
 		west_panel = new JPanel(new GridLayout(0,1,0,0));
 		contentPane.add(west_panel, BorderLayout.WEST);
 		//west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -481,20 +514,6 @@ public class Display extends JFrame {
 		JScrollPane scroll_pane2 = new JScrollPane(west_panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     contentPane.add(scroll_pane2, BorderLayout.WEST);
-
-		for(Playlist p : App.app.playlists){
-
-			JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-			buttonPane.setBackground(Display.primary);
-		//	buttonPane.setPreferredSize(new Dimension(25, 25));
-
-			JButton b = new JButton(p.getName());
-			setupButton(b);
-			playlistButtons.add(b);
-			playlistIds.add(p.getID());
-			buttonPane.add(b);
-			west_panel.add(buttonPane);
-		}
 	}
 
 
@@ -565,10 +584,37 @@ public class Display extends JFrame {
 
 			for(JButton b : addToButtons){
 				//Add song to playlist
+				if(src == b){
+					String playlistName = JOptionPane.showInputDialog(null, "Please enter the playlist you want to add the song too.\n(If playlist does not exist, a new one will be created)");
+
+					if(playlistName != null){
+
+						Song song = App.app.findSong(ids.get(addToButtons.indexOf(b)));
+
+
+						boolean exists = false;
+
+						//Add to existing
+						for(Playlist p : App.app.playlists){
+							if (playlistName.equals(p.getName())){
+								p.addSong(song);
+								//loadPlaylistToDisplay(App.app.getCurrentPlaylist()); //Refresh
+								exists = true;
+							}
+						}
+
+						if (!exists){
+							App.app.createPlaylist(playlistName, song);
+						}
+
+					}
+
+					foundButton = true;
+				}
 			}
 
 			for(JButton b : playlistButtons){
-				//selectedPlaylist = playlist
+				
 				if(src == b){
 					App.app.setCurrentPlaylist(App.app.findPlaylist(playlistIds.get(playlistButtons.indexOf(b))));
 					loadPlaylistToDisplay(App.app.getCurrentPlaylist());
