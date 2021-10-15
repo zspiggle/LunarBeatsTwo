@@ -32,7 +32,7 @@ public class SongPanel{
 
 		//likeButton.addActionListener(Display.buttonListener); Do in display
 
-    addToButton = new JButton("Add To");
+    addToButton = new JButton(d.getIcon("Add"));
 
     playButton = new JButton(d.getIcon("Play"));
 
@@ -58,11 +58,15 @@ public class SongPanel{
 		panel.add(song_column);
 		song_column.setForeground(Color.WHITE);
 		song_column.setFont(song_column.getFont().deriveFont(12.0f));
+    song_column.setPreferredSize(new Dimension(125, 25));
+
 
 		JLabel artist_column = new JLabel(artistName); 
 		panel.add(artist_column);
 		artist_column.setForeground(Color.WHITE);
 		artist_column.setFont(artist_column.getFont().deriveFont(12.0f));
+    artist_column.setPreferredSize(new Dimension(100, 25));
+
 
     if(likeButton != null){
       panel.add(likeButton);

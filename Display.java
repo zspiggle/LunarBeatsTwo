@@ -135,11 +135,12 @@ public class Display extends JFrame {
 		currentSongDisplay = new Label("Song: null");
 		currentSongDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentSongDisplay);
+		currentSongDisplay.setPreferredSize(new Dimension(125, 25));
 
 		currentArtistDisplay = new Label("Artist: null");
 		currentArtistDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentArtistDisplay);
-
+		currentSongDisplay.setPreferredSize(new Dimension(100, 25));
 
 
 
@@ -318,7 +319,8 @@ public class Display extends JFrame {
 		center_panel.setLayout(new GridLayout(0,1,0,0));
 		
 		
-    JScrollPane scroll_pane = new JScrollPane(center_panel);
+    JScrollPane scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     contentPane.add(scroll_pane);
 
 		JPanel playlist_panel = new JPanel();
@@ -338,6 +340,7 @@ public class Display extends JFrame {
 		header.add(song_column);
 		song_column.setForeground(Color.WHITE);
 		song_column.setFont(song_column.getFont().deriveFont(14.0f));
+		song_column.setPreferredSize(new Dimension(125,30));
 
 		JLabel artist_column = new JLabel("ARTIST"); 
 		header.add(artist_column);
@@ -364,6 +367,16 @@ public class Display extends JFrame {
 		resetCenter();
 
 	}
+
+
+	public void updateCurrentlyPlaying(){
+		Song current = App.app.getCurrentSong();
+
+		currentArtistDisplay.setText("Artist: " + current.getArtist());
+		currentSongDisplay.setText("Song: " + current.getName());
+
+	}
+
 
 	
 	public void updatePlayButton(){
