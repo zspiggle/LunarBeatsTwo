@@ -65,6 +65,13 @@ public class App {
     currentPlaylist = allSongs;
 
 
+    //Playlist p = new Playlist("All Songs");
+    Playlist p1 = new Playlist("Liked Songs", 1);
+    playlists.add(p1);
+    Playlist p2 = new Playlist("Test playlist", 2);
+    playlists.add(p2);
+
+
     if(App.display == null){
       App.display = new Display();
       App.display.setVisible(true);
@@ -72,9 +79,14 @@ public class App {
 
 
     generateTracklist();
-    for(Song s : tracklist){
-      System.out.println(s);
-    }
+
+
+    // for(Song s : tracklist){
+    //   System.out.println(s);
+    // }
+
+    
+
   }
 
   private void goThroughFiles(String dir) throws IOException{
@@ -162,6 +174,7 @@ public class App {
     return found;
   }
 
+
   public Song getCurrentSong(){
     return currentSong;
   }
@@ -173,6 +186,10 @@ public class App {
 
   public Playlist getCurrentPlaylist(){
     return currentPlaylist;
+  }
+
+  public void setCurrentPlaylist(Playlist p){
+    currentPlaylist = p;
   }
 
   public void play(){

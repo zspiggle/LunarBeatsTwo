@@ -14,6 +14,7 @@ Like feature
 Update like button or remove like button
 Tooltips
 #Get more music in folder
+Remove space in playlists
 
 --------------------------------
 /1. Change file type from .mp3 to .wav

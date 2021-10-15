@@ -27,6 +27,8 @@ public class Display extends JFrame {
 	private JButton mute_button;
 	private JButton delete_playlist_button;
 
+	// private JButton create_playlist_button;
+
 	private ArrayList<JButton> likeButtons;
 	private ArrayList<JButton> addToButtons;
 	private ArrayList<JButton> playButtons;
@@ -59,6 +61,14 @@ public class Display extends JFrame {
 	private ArrayList<SongPanel> songPanels;
 
 
+	//West layout
+	private JPanel west_panel;
+
+	private ArrayList<JButton> playlistButtons;
+	private ArrayList<Integer> playlistIds;
+	private int selectedPlaylist;
+
+
   public Display(){
 
 		buttonListener = new ButtonListener(this);
@@ -71,6 +81,8 @@ public class Display extends JFrame {
 		playButtons = new ArrayList<JButton>();
 		ids = new ArrayList<Integer>();
 
+		playlistIds = new ArrayList<Integer>();
+		playlistButtons = new ArrayList<JButton>();
 		//Color secondary = new Color(45, 56, 60); new Color(65, 76, 80);
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,6 +98,11 @@ public class Display extends JFrame {
 		
 		delete_playlist_button = new JButton(getIcon("Bin"));
 		setupButton(delete_playlist_button);
+
+
+
+		createCenter();
+		contentPane.add(center_panel, BorderLayout.CENTER);
 
 		resetCenter();
 
@@ -196,18 +213,10 @@ public class Display extends JFrame {
 
 
 
-		JPanel west_panel = new JPanel();
-		contentPane.add(west_panel, BorderLayout.WEST);
-		west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		west_panel.setBackground(Display.primary);
+		updatePlaylistsDisplay();
 
-		JScrollPane scroll_pane2 = new JScrollPane(west_panel);
-    contentPane.add(scroll_pane2, BorderLayout.WEST);
 
-		JButton liked_playlist = new JButton("Liked Songs");
-		setupButton(liked_playlist); 
-		liked_playlist.setVerticalAlignment(SwingConstants.TOP);
-		west_panel.add(liked_playlist);
+
 
     Image img = Toolkit.getDefaultToolkit().getImage("Icons/ProgramIcon.png");
     setIconImage(img);
@@ -215,6 +224,8 @@ public class Display extends JFrame {
 		addSongPanels();
 
 		loadPlaylistToDisplay(App.app.getCurrentPlaylist());
+		selectedPlaylist = App.app.getCurrentPlaylist().getID();
+		//updateSelectedPlaylist();
   }
 
 
@@ -299,6 +310,9 @@ public class Display extends JFrame {
 			}
 		}
 
+
+
+
 	}
 
 	private void resetSongPanels(){
@@ -313,39 +327,26 @@ public class Display extends JFrame {
 
 
 	private void resetCenter(){
-		center_panel = new JPanel();
+
+		for(SongPanel sp : songPanels){
+			center_panel.remove(sp.toJPanel());
+		}
+		
+
+		center_panel.revalidate();
+		center_panel.repaint();
+
+
+		contentPane.remove(center_panel);
+
+		createCenter();
 		contentPane.add(center_panel, BorderLayout.CENTER);
-		center_panel.setBackground(Display.bgColor);
-		center_panel.setLayout(new GridLayout(0,1,0,0));
+
+		contentPane.revalidate();
+		contentPane.repaint();
+	 
 		
 		
-    JScrollPane scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    contentPane.add(scroll_pane);
-
-		JPanel playlist_panel = new JPanel();
-		center_panel.add(playlist_panel);
-		playlist_panel.setBackground(Display.bgColor);
-
-		playlist_panel.add(currentPlaylistDisplay);
-		currentPlaylistDisplay.setForeground(Color.WHITE);
-		currentPlaylistDisplay.setFont(currentPlaylistDisplay.getFont().deriveFont(18.0f));
-		playlist_panel.add(delete_playlist_button);
-
-		JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
-		center_panel.add(header);
-		header.setBackground(Display.bgColor);
-
-		JLabel song_column = new JLabel("SONG"); 
-		header.add(song_column);
-		song_column.setForeground(Color.WHITE);
-		song_column.setFont(song_column.getFont().deriveFont(14.0f));
-		song_column.setPreferredSize(new Dimension(125,30));
-
-		JLabel artist_column = new JLabel("ARTIST"); 
-		header.add(artist_column);
-		artist_column.setForeground(Color.WHITE);
-		artist_column.setFont(artist_column.getFont().deriveFont(14.0f));
 
 
 		addSongPanels();
@@ -356,7 +357,7 @@ public class Display extends JFrame {
 
 		resetSongPanels();
 
-		currentPlaylistDisplay.setText("PLAYLIST: " + p.name);
+		currentPlaylistDisplay.setText("PLAYLIST: " + p.getName());
 
 		for(Song s : p.getSongs()){
 			SongPanel sp = new SongPanel(s.getName(), s.getArtist(), s.getID(), this);
@@ -413,6 +414,90 @@ public class Display extends JFrame {
 			shuffle_button.setIcon(getIcon("Shuffle"));
 		}
 	}
+
+	public void createCenter(){
+
+		center_panel = new JPanel();
+	//	contentPane.add(center_panel, BorderLayout.CENTER);
+		center_panel.setBackground(Display.bgColor);
+		center_panel.setLayout(new GridLayout(0,1,0,0));
+
+		
+    JScrollPane scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    contentPane.add(scroll_pane);
+
+		JPanel playlist_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		center_panel.add(playlist_panel);
+		playlist_panel.setBackground(Display.bgColor);
+
+		playlist_panel.add(currentPlaylistDisplay);
+		currentPlaylistDisplay.setForeground(Color.WHITE);
+		currentPlaylistDisplay.setFont(currentPlaylistDisplay.getFont().deriveFont(18.0f));
+		playlist_panel.add(delete_playlist_button);
+
+		JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+		center_panel.add(header);
+		header.setBackground(Display.bgColor);
+
+		JLabel song_column = new JLabel("SONG"); 
+		header.add(song_column);
+		song_column.setForeground(Color.WHITE);
+		song_column.setFont(song_column.getFont().deriveFont(14.0f));
+		song_column.setPreferredSize(new Dimension(125,30));
+
+		JLabel artist_column = new JLabel("ARTIST"); 
+		header.add(artist_column);
+		artist_column.setForeground(Color.WHITE);
+		artist_column.setFont(artist_column.getFont().deriveFont(14.0f));
+	}
+
+	// public void updateSelectedPlaylist(){
+	// 	if (App.app.getCurrentPlaylist().getID() != selectedPlaylist){
+	// 		selectedPlaylist = App.app.getCurrentPlaylist().getID();
+	// 	}
+
+	// 	for(JButton b : playlistButtons){
+	// 		b.setBackground(ui_color);
+	// 	}
+
+	// 	for(Integer i : playlistIds){
+	// 		if(i == selectedPlaylist){
+	// 			playButtons.get(playlistIds.indexOf(i)).setBackground(selected_color);
+	// 			System.out.println(playButtons.get(playlistIds.indexOf(i)).getText());
+	// 		}
+	// 	}
+		
+
+	// }
+
+
+	public void updatePlaylistsDisplay(){
+		west_panel = new JPanel(new GridLayout(0,1,0,0));
+		contentPane.add(west_panel, BorderLayout.WEST);
+		//west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		west_panel.setBackground(Display.primary);
+
+		JScrollPane scroll_pane2 = new JScrollPane(west_panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    contentPane.add(scroll_pane2, BorderLayout.WEST);
+
+		for(Playlist p : App.app.playlists){
+
+			JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+			buttonPane.setBackground(Display.primary);
+		//	buttonPane.setPreferredSize(new Dimension(25, 25));
+
+			JButton b = new JButton(p.getName());
+			setupButton(b);
+			playlistButtons.add(b);
+			playlistIds.add(p.getID());
+			buttonPane.add(b);
+			west_panel.add(buttonPane);
+		}
+	}
+
+
 
 	public void handleButtonPress(Object src){
 		if(src == play_button){
@@ -478,6 +563,24 @@ public class Display extends JFrame {
 			}
 
 
+			for(JButton b : addToButtons){
+				//Add song to playlist
+			}
+
+			for(JButton b : playlistButtons){
+				//selectedPlaylist = playlist
+				if(src == b){
+					App.app.setCurrentPlaylist(App.app.findPlaylist(playlistIds.get(playlistButtons.indexOf(b))));
+					loadPlaylistToDisplay(App.app.getCurrentPlaylist());
+					foundButton = true;
+
+					// for(SongPanel sp : songPanels){
+					// 	System.out.println(sp);
+					// }
+
+				}
+			}
+
 
 			if(foundButton == false){
 				System.out.println("Button not found");
@@ -487,72 +590,5 @@ public class Display extends JFrame {
 
 
 
-	// 	if(src == playButton){
-	// 		if (application.getisPlaying() == false){
-	// 				application.setisPlaying(true);
-	// 				application.playSong();
-	// 				playButton.setIcon(getIcon("Pause"));
-	// 		} else if(application.getisPlaying() == true){
-	// 				application.setisPlaying(false);
-	// 				application.pauseSong();
-	// 				playButton.setIcon(getIcon("Play"));
-	// 		}
-	// } else if (src == skipButton){
-
-	// 		application.nextSong();
-
-	// } else if (src == prevButton){
-
-	// 		application.prevSong();
-
-	// } else if (src == shuffleButton){
-	// 		if (application.getisShuffling() == false){
-	// 				application.setisShuffling(true);
-	// 				shuffleButton.setIcon(getIcon("Shuffling"));
-	// 		} else if(application.getisShuffling() == true){
-	// 				application.setisShuffling(false);
-	// 				shuffleButton.setIcon(getIcon("Shuffle"));
-	// 		}
-
-	// } else if (src == loopButton){
-	// 		if (application.getisLooping() == false){
-	// 				application.setisLooping(true);
-	// 				loopButton.setIcon(getIcon("Looping"));
-	// 		} else if(application.getisLooping() == true){
-	// 				application.setisLooping(false);
-	// 				loopButton.setIcon(getIcon("Loop"));
-	// 		}
-	/*} else if (src == likeButton){
-			if (application.getLiked() == false){
-					application.likeSong();
-					likeButton.setIcon(getIcon("Liked"));
-					//likeButton.setIcon(getIcon("Looping"));
-			} else if(application.getLiked() == true){
-					application.unlikeSong();
-					likeButton.setText("Like");
-					//likeButton.setIcon(getIcon("Loop"));
-			}*/
-	// } else if (src == volumeButton){
-	// 		if(application.getVolume() == 0){
-	// 				volumeButton.setIcon(getIcon("VolumeLow"));
-	// 				application.setVolume(1);
-	// 		} else if(application.getVolume() == 1){
-	// 				volumeButton.setIcon(getIcon("VolumeMed"));
-	// 				application.setVolume(2);
-	// 		} else if(application.getVolume() == 2){
-	// 				volumeButton.setIcon(getIcon("VolumeMax"));
-	// 				application.setVolume(3);
-	// 		}else{
-	// 				volumeButton.setIcon(getIcon("Mute"));
-	// 				application.setVolume(0);
-	// 		}
-	// } else {
-		
-			
-	// 		//if(found = false){
-	// 		System.out.println("Button function not found");
-	// 		//}
-	// 	}
-	// }
 	}
 }

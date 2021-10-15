@@ -4,12 +4,20 @@ import java.util.ArrayList;
 public class Playlist {
   
   private int id;
-  public String name;
+  private String name;
 
   private ArrayList<Song> songs;
 
 
   public Playlist(){
+    songs = new ArrayList<Song>();
+  }
+
+  public Playlist(String name, int id){
+
+    this.name = name;
+    this.id = id;
+
     songs = new ArrayList<Song>();
   }
 
@@ -26,6 +34,10 @@ public class Playlist {
 
   public int getID(){
     return id;
+  }
+
+  public String getName(){
+    return name;
   }
   
   public void addSong(Song newSong){
