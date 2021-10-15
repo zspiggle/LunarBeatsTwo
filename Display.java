@@ -135,12 +135,12 @@ public class Display extends JFrame {
 		currentSongDisplay = new Label("Song: null");
 		currentSongDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentSongDisplay);
-		currentSongDisplay.setPreferredSize(new Dimension(125, 25));
+		currentSongDisplay.setPreferredSize(new Dimension(200, 25));
 
 		currentArtistDisplay = new Label("Artist: null");
 		currentArtistDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentArtistDisplay);
-		currentSongDisplay.setPreferredSize(new Dimension(100, 25));
+		currentSongDisplay.setPreferredSize(new Dimension(150, 25));
 
 
 
@@ -484,6 +484,9 @@ public class Display extends JFrame {
 			}
 			
 		}
+
+
+
 	// 	if(src == playButton){
 	// 		if (application.getisPlaying() == false){
 	// 				application.setisPlaying(true);

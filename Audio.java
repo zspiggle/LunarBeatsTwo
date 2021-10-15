@@ -34,6 +34,7 @@ public class Audio implements LineListener{
       
       if (type == LineEvent.Type.START) {
         playCompleted = false;
+        App.display.updateCurrentlyPlaying();
         //System.out.println("Playback started.");
             
       } else if (type == LineEvent.Type.STOP) {
