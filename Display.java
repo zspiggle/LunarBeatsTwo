@@ -84,7 +84,7 @@ public class Display extends JFrame {
 		currentPlaylistDisplay = new Label("PLAYLIST: Null");
 		
 		
-		delete_playlist_button = new JButton("Delete Playlist");
+		delete_playlist_button = new JButton(getIcon("Bin"));
 		setupButton(delete_playlist_button);
 
 		resetCenter();
@@ -111,16 +111,16 @@ public class Display extends JFrame {
 		search_field.setForeground(Color.WHITE);
 		search_field.setCaretColor(Color.WHITE);
 
-		search_button = new JButton("Search");//getIcon("search_button"));
+		search_button = new JButton(getIcon("Glass"));
 		setupButton(search_button);
-		search_button.setBackground(selected_color);
+		search_button.setBackground(ui_color);
 		search_panel.add(search_button);
 		
 		JPanel settings_panel = new JPanel();
 		north_panel.add(settings_panel, BorderLayout.WEST);
 		settings_panel.setBackground(Display.primary);
 		
-		settings_button = new JButton("Settings");//getIcon("settings_button"));
+		settings_button = new JButton(getIcon("Gear"));
 		setupButton(settings_button);
 		settings_panel.add(settings_button);
 		
@@ -472,6 +472,7 @@ public class Display extends JFrame {
 					//App.app.audio.play();
 					App.app.currentSong = App.app.findSong(ids.get(playButtons.indexOf(b)));
 					App.app.play();
+					App.app.setTrackPos();
 					foundButton = true;
 				}
 			}

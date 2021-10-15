@@ -200,6 +200,7 @@ public class App {
   public void setIsShuffling(boolean b){
     isShuffling = b;
     display.updateShuffleButton();
+    generateTracklist();
   }
 
 
@@ -210,7 +211,14 @@ public class App {
         Collections.shuffle(tracklist);
       }
 
+      setTrackPos();
+
   }
+
+  public void setTrackPos(){
+    trackPosition = tracklist.indexOf(currentSong);
+  }
+
 
   public void nextSong(){
     trackPosition++;
