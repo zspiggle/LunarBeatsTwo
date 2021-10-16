@@ -2,7 +2,7 @@ import java.io.*;
 
 public class CSVWriter {
   
-  static String path = "Files/";
+  //static String path = "Files/";
 
   private String fileLoc;
   private FileWriter fw;
@@ -15,13 +15,15 @@ public class CSVWriter {
     
 
     try{
-;
+
+
       file.createNewFile();
-      
+
 
       fw = new FileWriter(file);
 
     } catch (Exception e){
+      System.out.println(e.getMessage());
       System.out.println("There was an issue loading a file");
     }
   }

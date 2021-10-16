@@ -59,6 +59,7 @@ public class CSVReader{
 
 
       } catch (Exception e){
+        System.out.println(e.getMessage());
         System.out.println("There was an error parsing the file.");
       }
       
@@ -90,7 +91,7 @@ public class CSVReader{
           sb.append(c);
           //System.out.println(c);
         } else {
-          cells.add(parseCell(sb.toString()));
+          cells.add(sb.toString());//parseCell(sb.toString()));
           sb.setLength(0);
         }
 

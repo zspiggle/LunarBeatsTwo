@@ -57,6 +57,7 @@ public class Display extends JFrame {
 
 	//Central layout display
 	private JPanel center_panel;
+	JScrollPane scroll_pane;
 
 	private ArrayList<SongPanel> songPanels;
 
@@ -67,7 +68,7 @@ public class Display extends JFrame {
 	private ArrayList<JButton> playlistButtons;
 	private ArrayList<Integer> playlistIds;
 	private int selectedPlaylist;
-
+	private ArrayList<JPanel> playlistPanels;		
 
   public Display(){
 
@@ -83,10 +84,12 @@ public class Display extends JFrame {
 
 		playlistIds = new ArrayList<Integer>();
 		playlistButtons = new ArrayList<JButton>();
+
+		playlistPanels = new ArrayList<JPanel>();
 		//Color secondary = new Color(45, 56, 60); new Color(65, 76, 80);
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 960, 540);
+		setBounds(100, 100, 940, 540);
 		contentPane = new JPanel();
 		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -101,12 +104,17 @@ public class Display extends JFrame {
 
 
 
-		createCenter();
-		contentPane.add(center_panel, BorderLayout.CENTER);
+
+		//createCenter();
+		//contentPane.add(center_panel, BorderLayout.CENTER);
+
+		
+
+
 
 		resetCenter();
 
-
+		
 
 		JPanel north_panel = new JPanel();
 		contentPane.add(north_panel, BorderLayout.NORTH);
@@ -149,12 +157,12 @@ public class Display extends JFrame {
 		displayCurrent.setForeground(Color.WHITE);
 		display_panel.add(displayCurrent);
 
-		currentSongDisplay = new Label("Song: null");
+		currentSongDisplay = new Label("Song: ~");
 		currentSongDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentSongDisplay);
 		currentSongDisplay.setPreferredSize(new Dimension(200, 25));
 
-		currentArtistDisplay = new Label("Artist: null");
+		currentArtistDisplay = new Label("Artist: ~");
 		currentArtistDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentArtistDisplay);
 		currentSongDisplay.setPreferredSize(new Dimension(150, 25));
@@ -328,19 +336,26 @@ public class Display extends JFrame {
 
 	private void resetCenter(){
 
-		for(SongPanel sp : songPanels){
-			center_panel.remove(sp.toJPanel());
+		if(center_panel != null){
+			for(SongPanel sp : songPanels){
+				center_panel.remove(sp.toJPanel());
+			}
+
+			contentPane.remove(center_panel);
+
+
+
 		}
-		
+
+		createCenter();
+		contentPane.add(center_panel, BorderLayout.CENTER);
+		scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		contentPane.add(scroll_pane);
+
 
 		center_panel.revalidate();
 		center_panel.repaint();
 
-
-		contentPane.remove(center_panel);
-
-		createCenter();
-		contentPane.add(center_panel, BorderLayout.CENTER);
 
 		contentPane.revalidate();
 		contentPane.repaint();
@@ -415,6 +430,14 @@ public class Display extends JFrame {
 		}
 	}
 
+	public void updateLoopButton(){
+		if(App.app.getIsLooping() == true){
+			loop_button.setIcon(getIcon("Looping"));
+		} else {
+			loop_button.setIcon(getIcon("Loop"));
+		}
+	}
+
 	public void createCenter(){
 
 		center_panel = new JPanel();
@@ -423,9 +446,8 @@ public class Display extends JFrame {
 		center_panel.setLayout(new GridLayout(0,1,0,0));
 
 		
-    JScrollPane scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    contentPane.add(scroll_pane);
+    //scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    //contentPane.add(scroll_pane);
 
 		JPanel playlist_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		center_panel.add(playlist_panel);
@@ -473,32 +495,39 @@ public class Display extends JFrame {
 
 
 	public void updatePlaylistsDisplay(){
+
+		for(JPanel p : playlistPanels){
+			west_panel.remove(p);
+		}
 		
 
 
 		for(Playlist p : App.app.playlists){
 
-			boolean flag = false;
+			// boolean flag = false;
 
-			for(Integer i : playlistIds ){
-					if (p.getID() == i){
-						flag = true;
-					}
-			}
+			// for(Integer i : playlistIds ){
+			// 		if (p.getID() == i){
+			// 			flag = true;
+			// 		}
+			// }
 
-			if(!flag){
+			// if(!flag){
 
 				JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 				buttonPane.setBackground(Display.primary);
 			//	buttonPane.setPreferredSize(new Dimension(25, 25));
 
+				playlistPanels.add(buttonPane);
+
 				JButton b = new JButton(p.getName());
+				b.setPreferredSize(new Dimension(125,25));
 				setupButton(b);
 				playlistButtons.add(b);
 				playlistIds.add(p.getID());
 				buttonPane.add(b);
 				west_panel.add(buttonPane);
-			}
+			//}
 		}
 
 		west_panel.revalidate();
@@ -563,7 +592,30 @@ public class Display extends JFrame {
 				App.app.setIsShuffling(false);
 			}
 
+		} else if(src == loop_button){
+			if(App.app.getIsLooping() == false){
+				App.app.setIsLooping(true);
+			} else {
+				App.app.setIsLooping(false);
+			}
+
+
+		} else if(src == delete_playlist_button){
+
+			if(App.app.currentPlaylist.getDelete() == true){
+				App.app.removePlaylist(App.app.currentPlaylist);
+
+				App.app.setCurrentPlaylist(App.app.playlists.get(0)); //Should always return all songs
+
+				updatePlaylistsDisplay();
+				loadPlaylistToDisplay(App.app.currentPlaylist);
+
+			} else {
+				System.out.println("You cannot delete this playlist.");
+			}
 			
+		} else if(src == settings_button){
+			System.out.println(scroll_pane);
 
 		} else {
 
@@ -609,6 +661,7 @@ public class Display extends JFrame {
 
 					}
 
+					App.app.savePlaylists();
 					foundButton = true;
 				}
 			}

@@ -12,12 +12,15 @@ public class Playlist {
 
   public Playlist(){
     songs = new ArrayList<Song>();
+    deletable = true;
   }
 
   public Playlist(String name, int id){
 
     this.name = name;
     this.id = id;
+
+    deletable = true;
 
     songs = new ArrayList<Song>();
   }
@@ -30,6 +33,8 @@ public class Playlist {
     if(s != null){
       songs = s;
     }
+
+    deletable = true;
   }
 
 

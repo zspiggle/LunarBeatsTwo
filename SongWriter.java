@@ -5,6 +5,12 @@ public class SongWriter extends CSVWriter{
   public SongWriter(String filename){
     //super(CSVWriter.path + filename);
     super(filename);
+
+    writeElement("Song Name");
+    writeElement("Artist Name");
+    writeElement("File Location");
+    writeLine();
+
     for(Song s : App.app.songs){
       writeSong(s);
 
@@ -22,7 +28,7 @@ public class SongWriter extends CSVWriter{
     // } else {
     //   writeElement("0");
     // }
-    writeElement((String.valueOf(s.getID())));
+    //writeElement((String.valueOf(s.getID())));
     writeElement(s.getFileLoc());
     writeLine();
 

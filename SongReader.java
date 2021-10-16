@@ -6,15 +6,18 @@ public class SongReader extends CSVReader{
   public SongReader(String filename){
     super(filename);
 
+    //printData();
+
     createSongs();
 
   }
 
   public void createSongs(){
+
     for(int i = 0; i < data.length; i++){
 
-      String songName = data[i][0].toString();
-      String artist = data[i][1].toString();
+      String songName = data[i][1].toString();
+      String artist = data[i][0].toString();
       // boolean liked;
       // if(Integer.parseInt(data[i][2].toString()) == 1){
 
@@ -25,7 +28,7 @@ public class SongReader extends CSVReader{
       // }
 
       // int songId = Integer.parseInt(data[i][2].toString());
-      String fileName = data[i][5].toString();
+      String fileName = data[i][2].toString();
 
       // for(int j = 0; j < data[i].length; j++){
 

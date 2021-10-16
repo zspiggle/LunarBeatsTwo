@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class App {
+public class App{
 
   public static App app;
   public static Display display;
@@ -21,11 +21,12 @@ public class App {
   public Audio audio;
 
   private boolean isShuffling;
+  private boolean isLooping;
 
   private int nextID;
   private int nextPlayID;
 
-  public static void main(String[] args){
+  public static void main(String[] args) throws Exception{
     App app = new App();
   }
 
@@ -49,6 +50,7 @@ public class App {
     audio = new Audio(this);
 
     isShuffling = false;
+    isLooping = false;
     trackPosition = 0;
 
     //Load existing songs
@@ -75,6 +77,7 @@ public class App {
     Playlist allSongs = new Playlist("All Songs", songs, 0);
     playlists.add(allSongs);
     currentPlaylist = allSongs;
+    allSongs.setDelete(false);
 
 
     //Playlist p = new Playlist("All Songs");
@@ -86,6 +89,7 @@ public class App {
 
     if(App.display == null){
       App.display = new Display();
+      //App.display.pack();
       App.display.setVisible(true);
     }
 
@@ -102,6 +106,10 @@ public class App {
 
 
       saveSongs();
+
+      display.updatePlaylistsDisplay();
+
+      loadPlaylists();
 
   }
 
@@ -242,6 +250,14 @@ public class App {
   public boolean getIsShuffling(){
     return isShuffling;
   }
+  public boolean getIsLooping(){
+    return isLooping;
+  }
+
+  public void setIsLooping(boolean b){
+    isLooping = b;
+    display.updateLoopButton();
+  }
 
   public void setIsShuffling(boolean b){
     isShuffling = b;
@@ -267,13 +283,19 @@ public class App {
 
 
   public void nextSong(){
-    trackPosition++;
-    if(trackPosition >= tracklist.size()){
-      trackPosition = 0;
-    }
 
-    currentSong = tracklist.get(trackPosition);
-    play();
+    if(isLooping == true){
+      play();
+    } else {
+      trackPosition++;
+      if(trackPosition >= tracklist.size()){
+        trackPosition = 0;
+      }
+  
+      currentSong = tracklist.get(trackPosition);
+      play();
+    }
+    
 
   }
 
@@ -300,6 +322,17 @@ public class App {
     nextPlayID++;
   }
 
+  public void createPlaylist(String name, ArrayList<Song> songs){
+
+    Playlist p = new Playlist(name, songs, nextPlayID);
+
+    playlists.add(p);
+
+    display.updatePlaylistsDisplay();
+
+    nextPlayID++;
+  }
+
   public void saveSongs(){
     SongWriter sw = new SongWriter("Files/Songs.csv");
 
@@ -309,6 +342,61 @@ public class App {
   public void loadSongs(){
     SongReader sr = new SongReader("Files/Songs.csv");
    
+  }
+
+  public void savePlaylists(){
+
+    for(Playlist p : playlists){
+      if(p.getDelete() == true){
+        PlaylistWriter pw = new PlaylistWriter("Files/Playlists/" + p.getName() + ".csv", p);
+
+        pw.close();
+      }
+    }
+
+  }
+
+
+  public void loadPlaylists(){
+
+    try{
+      File f = new File("Files/Playlists/");
+      File[] files = f.listFiles();
+  
+      for (int i = 0; i < files.length; i++) {
+  
+          File file = files[i];
+          //System.out.println(file.getName());
+             if (file.isDirectory()) {   
+              goThroughFiles(file.getPath()); 
+            } else { 
+              loadPlaylist("Files/Playlists/"+file.getName());
+              
+            }
+        
+  
+      }
+    } catch (Exception e){
+      System.out.println(e);
+      //System.out.println(e.getMessage());
+      System.out.println("There was an issue loading playlists");
+    }
+    
+  }
+
+
+  private void loadPlaylist(String s){
+    PlaylistReader pr = new PlaylistReader(s);
+
+  }
+
+  public void removePlaylist(Playlist p){
+    playlists.remove(p);
+
+    File f = new File("Files/Playlists/" + p.getName()+ ".csv");
+
+    f.delete();
+
   }
 
 
