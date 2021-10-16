@@ -1,5 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.*;
+
+//import org.graalvm.compiler.hotspot.nodes.aot.ResolveMethodAndLoadCountersNode;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
@@ -105,14 +108,14 @@ public class Display extends JFrame {
 
 
 
-		//createCenter();
+		resetCenter();
 		//contentPane.add(center_panel, BorderLayout.CENTER);
 
-		
+		//build
 
 
 
-		resetCenter();
+		//resetCenter();
 
 		
 
@@ -324,6 +327,13 @@ public class Display extends JFrame {
 	}
 
 	private void resetSongPanels(){
+
+		for(SongPanel sp : songPanels){
+			center_panel.remove(sp.toJPanel());
+		}
+
+		//contentPane.remove(center_panel);
+
 		likeButtons = new ArrayList<JButton>();
 		addToButtons = new ArrayList<JButton>();
 		playButtons = new ArrayList<JButton>();
@@ -334,45 +344,45 @@ public class Display extends JFrame {
 	}
 
 
-	private void resetCenter(){
-
-		if(center_panel != null){
-			for(SongPanel sp : songPanels){
-				center_panel.remove(sp.toJPanel());
-			}
-
-			contentPane.remove(center_panel);
+	// private void resetCenter(){
+	// 	
 
 
+	// }
 
-		}
 
-		createCenter();
+	private void buildCenter(){
+
+
+		resetCenter();
 		contentPane.add(center_panel, BorderLayout.CENTER);
+
 		scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		contentPane.add(scroll_pane);
 
 
-		center_panel.revalidate();
-		center_panel.repaint();
-
-
-		contentPane.revalidate();
-		contentPane.repaint();
-	 
-		
-		
+		//center_panel.revalidate();
+		//center_panel.repaint();
 
 
 		addSongPanels();
+
+		center_panel.revalidate();
+		center_panel.repaint();
+
+		contentPane.revalidate();
+		contentPane.repaint();
+
+	
 	}
+
 
 
 	public void loadPlaylistToDisplay(Playlist p){
 
 		resetSongPanels();
-
-		currentPlaylistDisplay.setText("PLAYLIST: " + p.getName());
+		//resetCenter();
+		//currentPlaylistDisplay.setText("PLAYLIST: " + p.name);
 
 		for(Song s : p.getSongs()){
 			SongPanel sp = new SongPanel(s.getName(), s.getArtist(), s.getID(), this);
@@ -380,8 +390,52 @@ public class Display extends JFrame {
 			songPanels.add(sp);
 		}
 		
-		resetCenter();
+		buildCenter();
+		//resetCenter();
 
+		center_panel.revalidate();
+		center_panel.repaint();
+
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+
+	
+
+	private void resetCenter(){
+		center_panel = new JPanel();
+		//	contentPane.add(center_panel, BorderLayout.CENTER);
+			center_panel.setBackground(Display.bgColor);
+			center_panel.setLayout(new GridLayout(0,1,0,0));
+	
+			
+			scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			contentPane.add(scroll_pane);
+	
+			JPanel playlist_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			center_panel.add(playlist_panel);
+			playlist_panel.setBackground(Display.bgColor);
+	
+			playlist_panel.add(currentPlaylistDisplay);
+			currentPlaylistDisplay.setForeground(Color.WHITE);
+			//currentPlaylistDisplay.setText("PLAYLIST: " + App.app.getCurrentPlaylist().getName());
+			currentPlaylistDisplay.setFont(currentPlaylistDisplay.getFont().deriveFont(18.0f));
+			playlist_panel.add(delete_playlist_button);
+	
+			JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
+			center_panel.add(header);
+			header.setBackground(Display.bgColor);
+	
+			JLabel song_column = new JLabel("SONG"); 
+			header.add(song_column);
+			song_column.setForeground(Color.WHITE);
+			song_column.setFont(song_column.getFont().deriveFont(14.0f));
+			song_column.setPreferredSize(new Dimension(125,30));
+	
+			JLabel artist_column = new JLabel("ARTIST"); 
+			header.add(artist_column);
+			artist_column.setForeground(Color.WHITE);
+			artist_column.setFont(artist_column.getFont().deriveFont(14.0f));
 	}
 
 
@@ -438,41 +492,6 @@ public class Display extends JFrame {
 		}
 	}
 
-	public void createCenter(){
-
-		center_panel = new JPanel();
-	//	contentPane.add(center_panel, BorderLayout.CENTER);
-		center_panel.setBackground(Display.bgColor);
-		center_panel.setLayout(new GridLayout(0,1,0,0));
-
-		
-    //scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    //contentPane.add(scroll_pane);
-
-		JPanel playlist_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		center_panel.add(playlist_panel);
-		playlist_panel.setBackground(Display.bgColor);
-
-		playlist_panel.add(currentPlaylistDisplay);
-		currentPlaylistDisplay.setForeground(Color.WHITE);
-		currentPlaylistDisplay.setFont(currentPlaylistDisplay.getFont().deriveFont(18.0f));
-		playlist_panel.add(delete_playlist_button);
-
-		JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT, 75, 0));
-		center_panel.add(header);
-		header.setBackground(Display.bgColor);
-
-		JLabel song_column = new JLabel("SONG"); 
-		header.add(song_column);
-		song_column.setForeground(Color.WHITE);
-		song_column.setFont(song_column.getFont().deriveFont(14.0f));
-		song_column.setPreferredSize(new Dimension(125,30));
-
-		JLabel artist_column = new JLabel("ARTIST"); 
-		header.add(artist_column);
-		artist_column.setForeground(Color.WHITE);
-		artist_column.setFont(artist_column.getFont().deriveFont(14.0f));
-	}
 
 	// public void updateSelectedPlaylist(){
 	// 	if (App.app.getCurrentPlaylist().getID() != selectedPlaylist){
@@ -615,7 +634,7 @@ public class Display extends JFrame {
 			}
 			
 		} else if(src == settings_button){
-			System.out.println(scroll_pane);
+			System.out.println(App.app.currentPlaylist);
 
 		} else {
 
