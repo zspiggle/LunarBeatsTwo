@@ -375,55 +375,7 @@ public class Display extends JFrame {
 
 	}
 
-	// private void resetSongPanels(){
 
-	// 	for(SongPanel sp : songPanels){
-	// 		center_panel.remove(sp.toJPanel());
-	// 	}
-
-	// 	//contentPane.remove(center_panel);
-
-	// 	likeButtons = new ArrayList<JButton>();
-	// 	addToButtons = new ArrayList<JButton>();
-	// 	playButtons = new ArrayList<JButton>();
-	// 	songPanels = new ArrayList<SongPanel>();
-	// 	ids = new ArrayList<Integer>();
-
-	// 	resetCenter();
-	// }
-
-
-	// private void resetCenter(){
-	// 	
-
-
-	// }
-
-
-	// private void buildCenter(){
-
-
-	// 	//resetCenter();
-	// 	contentPane.add(center_panel, BorderLayout.CENTER);
-
-	// 	scroll_pane = new JScrollPane(center_panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	// 	contentPane.add(scroll_pane);
-
-
-	// 	//center_panel.revalidate();
-	// 	//center_panel.repaint();
-
-
-	// 	addSongPanels();
-
-	// 	center_panel.revalidate();
-	// 	center_panel.repaint();
-
-	// 	contentPane.revalidate();
-	// 	contentPane.repaint();
-
-	
-	// }
 
 
 
@@ -586,16 +538,7 @@ public class Display extends JFrame {
 
 		for(Playlist p : App.app.playlists){
 
-			// boolean flag = false;
-
-			// for(Integer i : playlistIds ){
-			// 		if (p.getID() == i){
-			// 			flag = true;
-			// 		}
-			// }
-
-			// if(!flag){
-
+			if(p.getID() != -1){
 				JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 				buttonPane.setBackground(Display.primary);
 			//	buttonPane.setPreferredSize(new Dimension(25, 25));
@@ -609,7 +552,9 @@ public class Display extends JFrame {
 				playlistIds.add(p.getID());
 				buttonPane.add(b);
 				west_panel.add(buttonPane);
-			//}
+
+			}
+
 		}
 
 		west_panel.revalidate();
@@ -619,7 +564,7 @@ public class Display extends JFrame {
 
 
 	public void createPlaylistsDisplay(){
-		west_panel = new JPanel(new GridLayout(0,1,0,0));
+		west_panel = new JPanel(new GridLayout(0,1,0,10));
 		contentPane.add(west_panel, BorderLayout.WEST);
 		//west_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		west_panel.setBackground(Display.primary);
@@ -708,7 +653,15 @@ public class Display extends JFrame {
 			}
 			
 		} else if(src == settings_button){
-			System.out.println(App.app.currentPlaylist);
+			System.out.println("There are no changable settings as of yet.");
+
+		} else if(src == search_button){
+
+			App.app.searchFor(search_field.getText());
+			search_field.setText("");
+
+			loadPlaylistToDisplay(App.app.findPlaylist(-1));
+
 
 		} else {
 

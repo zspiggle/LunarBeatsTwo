@@ -151,9 +151,9 @@ public class Audio implements LineListener{
       volumeSetting = setting;
 
       switch(volumeSetting){
-          case 1:setVolume(0.1f); break;
-          case 2: setVolume(0.3f); break;
-          case 3: setVolume(0.7f); break;
+          case 1:setVolume(0.05f); break;
+          case 2: setVolume(0.2f); break;
+          case 3: setVolume(0.6f); break;
           default: break;
       }
 

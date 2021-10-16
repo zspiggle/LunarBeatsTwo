@@ -79,6 +79,10 @@ public class App{
     currentPlaylist = allSongs;
     allSongs.setDelete(false);
 
+    Playlist searchPlaylist = new Playlist("Search Results", songs, -1);
+    playlists.add(searchPlaylist);
+    currentPlaylist = allSongs;
+    allSongs.setDelete(false);
 
     //Playlist p = new Playlist("All Songs");
     //  Playlist p1 = new Playlist("Liked Songs", 1);
@@ -332,6 +336,31 @@ public class App{
 
     nextPlayID++;
   }
+
+
+
+  public void searchFor(String search){
+    Playlist results = findPlaylist(-1);
+
+    //Clear search results
+    results.setSongs(new ArrayList<Song>());
+
+    for(Song s : songs){
+      String name = s.getName().toLowerCase();
+      String artist = s.getArtist().toLowerCase();
+
+      if(name.contains(search.toLowerCase()) || artist.contains(search.toLowerCase())){
+          results.addSong(s);
+      }
+      
+    }
+
+  }
+
+
+
+
+
 
   public void saveSongs(){
     SongWriter sw = new SongWriter("Files/Songs.csv");

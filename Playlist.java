@@ -61,6 +61,10 @@ public class Playlist {
     return songs;
   }
 
+  public void setSongs(ArrayList<Song> newSongs){
+    songs = newSongs;
+  }
+
   public void setDelete(boolean b){
     deletable = b;
   }
