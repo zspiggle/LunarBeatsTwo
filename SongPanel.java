@@ -38,8 +38,10 @@ public class SongPanel{
 		//likeButton.addActionListener(Display.buttonListener); Do in display
 
     addToButton = new JButton(d.getIcon("Add"));
+    addToButton.setToolTipText("Add to a playlist");
 
     playButton = new JButton(d.getIcon("Play"));
+    playButton.setToolTipText("Play this song");
 
   }
 

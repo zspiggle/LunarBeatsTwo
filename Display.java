@@ -105,6 +105,7 @@ public class Display extends JFrame {
 		
 		
 		delete_playlist_button = new JButton(getIcon("Bin"));
+		delete_playlist_button.setToolTipText("Deletes the current playlist");
 		setupButton(delete_playlist_button);
 
 
@@ -189,6 +190,7 @@ public class Display extends JFrame {
 		search_field.setCaretColor(Color.WHITE);
 
 		search_button = new JButton(getIcon("Glass"));
+		search_button.setToolTipText("Search for a song/artist");
 		setupButton(search_button);
 		search_button.setBackground(ui_color);
 		search_panel.add(search_button);
@@ -198,6 +200,7 @@ public class Display extends JFrame {
 		settings_panel.setBackground(Display.primary);
 		
 		settings_button = new JButton(getIcon("Gear"));
+		settings_button.setToolTipText("Change your settings (Not implemented)");
 		setupButton(settings_button);
 		settings_panel.add(settings_button);
 		
@@ -217,7 +220,7 @@ public class Display extends JFrame {
 		currentArtistDisplay = new Label("Artist: ~");
 		currentArtistDisplay.setForeground(Color.WHITE);
 		display_panel.add(currentArtistDisplay);
-		currentSongDisplay.setPreferredSize(new Dimension(150, 25));
+		currentArtistDisplay.setPreferredSize(new Dimension(200, 25));
 
 
 
@@ -233,14 +236,17 @@ public class Display extends JFrame {
 		center_control_panel.setBackground(Display.primary);
 
 		previous_button = new JButton(getIcon("Previous"));
+		previous_button.setToolTipText("Go back to the previous song");
 		setupButton(previous_button);
 		center_control_panel.add(previous_button);
 		
 		play_button = new JButton(getIcon("Play"));
+		play_button.setToolTipText("Play/Pause");
 		setupButton(play_button);
 		center_control_panel.add(play_button);
 		
 		skip_button = new JButton(getIcon("Skip"));
+		skip_button.setToolTipText("Skip to the next song");
 		setupButton(skip_button);
 		center_control_panel.add(skip_button);
 		
@@ -250,10 +256,12 @@ public class Display extends JFrame {
 		right_control_panel.setBackground(Display.primary);
 
 		shuffle_button = new JButton(getIcon("Shuffle"));
+		shuffle_button.setToolTipText("Play songs randomly");
 		setupButton(shuffle_button);
 		right_control_panel.add(shuffle_button);
 
 		loop_button = new JButton(getIcon("Loop"));
+		loop_button.setToolTipText("Loop the same song on repeat");
 		setupButton(loop_button);
 		right_control_panel.add(loop_button);
 
@@ -262,10 +270,12 @@ public class Display extends JFrame {
 		left_control_panel.setBackground(Display.primary);
 
 		volume_button = new JButton(getIcon("VolumeMed"));
+		volume_button.setToolTipText("Change the volume");
 		setupButton(volume_button);
 		left_control_panel.add(volume_button);
 		
 		mute_button = new JButton(getIcon("Mute"));
+		mute_button.setToolTipText("Mute the song");
 		setupButton(mute_button);
 		left_control_panel.add(mute_button);
 		
