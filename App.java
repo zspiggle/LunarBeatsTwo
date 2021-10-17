@@ -124,7 +124,7 @@ public class App{
     for (int i = 0; i < files.length; i++) {
 
         File file = files[i];
-        if(!file.getName().equals("_UNSORTED")){
+       // if(!file.getName().equals("_UNSORTED")){
 
             if (file.isDirectory()) {   
                 goThroughFiles(file.getPath()); 
@@ -132,7 +132,7 @@ public class App{
                 //System.out.println("Music file : " + file.getName());
                 loadSong(file);
             }
-        }
+      //  }
 
     }
 
@@ -399,7 +399,9 @@ public class App{
              if (file.isDirectory()) {   
               goThroughFiles(file.getPath()); 
             } else { 
-              loadPlaylist("Files/Playlists/"+file.getName());
+              //System.out.println(file.getName());
+              loadPlaylist("Files/Playlists/"+ file.getName());
+              
               
             }
         

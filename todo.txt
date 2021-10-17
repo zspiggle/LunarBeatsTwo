@@ -12,9 +12,9 @@ Search bar through all songs -> Search playlist""
 
 #Update ICONS
 #Update like button or remove like button
-Tooltips
+#Tooltips
 #Get more music in folder
-Remove space in playlists
+
 
 --------------------------------
 /1. Change file type from .mp3 to .wav
