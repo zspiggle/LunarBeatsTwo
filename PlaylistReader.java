@@ -10,8 +10,8 @@ public class PlaylistReader extends CSVReader{
     //System.out.println(filename);
 
 
-    //printData();
 
+    
     name = filename;
 
     String newName = name.substring(16, name.length()-4);
@@ -34,6 +34,7 @@ public class PlaylistReader extends CSVReader{
 
 
     //I dont know why this was a bug but data.length returned 4 for no reason
+    //System.out.println(data.length);
     for(int i = 0; i < data.length; i++){
 
       Song s = App.app.findSong(data[i][0].toString(), data[i][1].toString());
