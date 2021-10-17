@@ -82,7 +82,7 @@ public class App{
     Playlist searchPlaylist = new Playlist("Search Results", songs, -1);
     playlists.add(searchPlaylist);
     currentPlaylist = allSongs;
-    allSongs.setDelete(false);
+    searchPlaylist.setDelete(false);
 
     //Playlist p = new Playlist("All Songs");
     //  Playlist p1 = new Playlist("Liked Songs", 1);
